@@ -5,8 +5,16 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000; // Pode ser alterado conforme necessário
 
+// Configuração de CORS
+const corsOptions = {
+    origin: 'http://127.0.0.1:5500',  // Permitir requisições dessa origem específica
+    methods: ['GET', 'PATCH'],  // Especifica quais métodos HTTP são permitidos
+    allowedHeaders: ['Content-Type'],  // Cabeçalhos permitidos
+  };
+
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Lista de presentes (simulação de um banco de dados)
