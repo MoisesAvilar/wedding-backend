@@ -7,9 +7,11 @@ const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: '*',  // Permitir requisições dessa origem específica
-    methods: ['GET', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type']
+    origin: '*', // Permitir todas as origens
+    methods: ['GET', 'PATCH', 'OPTIONS'], // Permitir métodos GET, PATCH, e OPTIONS
+    allowedHeaders: ['Content-Type'], // Permitir cabeçalhos específicos
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 };
 
 // Middleware
