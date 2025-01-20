@@ -16,7 +16,7 @@
         "origin": "*",
         "methods": ["GET", "POST", "PATCH", "OPTIONS"],
         "allowedHeaders": ["Content-Type"]
-      }
+      } 
     }
   ]
 }
