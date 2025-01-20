@@ -10,13 +10,6 @@
     {
       "src": "/presentes",
       "dest": "/server.js"
-    },
-    {
-      "cors": {
-        "origin": "*",
-        "methods": ["GET", "POST", "PATCH", "OPTIONS"],
-        "allowedHeaders": ["Content-Type"]
-      } 
     }
   ]
 }
