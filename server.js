@@ -80,7 +80,7 @@ app.get('/presentes/:id', (req, res) => {
 });
 
 // Endpoint para alterar a disponibilidade de um presente
-app.patch('/presentes/:id', (req, res) => {
+app.put('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
 
