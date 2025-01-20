@@ -7,7 +7,7 @@ const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: '*', // Permitir todas as origens
+    origin: 'http://127.0.0.1:5500', // Permitir todas as origens
     methods: ['GET', 'PATCH', 'OPTIONS'], // Permitir métodos GET, PATCH, e OPTIONS
     allowedHeaders: ['Content-Type'], // Permitir cabeçalhos específicos
     preflightContinue: false,
