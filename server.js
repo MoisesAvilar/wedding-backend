@@ -5,8 +5,12 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000; // Pode ser alterado conforme necessário
 
-// Middleware
-app.use(cors());
+// Middleware para CORS
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500',  // Permite apenas essa origem
+};
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 
 // Lista de presentes (simulação de um banco de dados)
@@ -52,8 +56,7 @@ let presentes = [
     { id: 39, nome: 'Toalhas de Banho', disponivel: true },
     { id: 40, nome: 'Jogo de Banheiro', disponivel: true },
     { id: 41, nome: 'Ferro de Passar', disponivel: true }
-  ];
-  
+];
 
 // Endpoint para obter todos os presentes
 app.get('/presentes', (req, res) => {
@@ -65,6 +68,10 @@ app.patch('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
 
+    if (typeof disponivel !== 'boolean') {
+        return res.status(400).json({ message: 'O campo "disponivel" deve ser um valor booleano.' });
+    }
+
     let presente = presentes.find(p => p.id == id);
     
     if (!presente) {
@@ -73,7 +80,10 @@ app.patch('/presentes/:id', (req, res) => {
 
     presente.disponivel = disponivel;
 
-    res.json(presente);
+    res.json({
+        message: 'Presente atualizado com sucesso!',
+        presente
+    });
 });
 
 // Iniciar o servidor
