@@ -1,25 +1,22 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "server.js",
-        "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/presentes",
+      "dest": "/server.js"
+    },
+    {
+      "cors": {
+        "origin": "*",
+        "methods": ["GET", "POST", "PATCH", "OPTIONS"],
+        "allowedHeaders": ["Content-Type"]
       }
-    ],
-    "routes": [
-      {
-        "src": "/presentes",
-        "dest": "/server.js"
-      },
-      {
-        "src": "/presentes/(.*)",
-        "headers": {
-          "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
-          "Access-Control-Allow-Methods": "GET, PATCH, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type"
-        },
-        "methods": ["GET", "PATCH", "OPTIONS"]
-      }
-    ]
-  }
-  
+    }
+  ]
+}

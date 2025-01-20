@@ -3,15 +3,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000; // Pode ser alterado conforme necessário
+const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500',  // Permitir requisições dessa origem específica
-    methods: ['GET', 'PATCH'],  // Especifica quais métodos HTTP são permitidos
-    allowedHeaders: ['Content-Type'],  // Cabeçalhos permitidos
-  };
-
+    origin: '*',  // Permitir requisições dessa origem específica
+    methods: ['GET', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+};
 
 // Middleware
 app.use(cors(corsOptions));
@@ -68,19 +67,30 @@ app.get('/presentes', (req, res) => {
     res.json(presentes);
 });
 
+// Endpoint para obter um presente específico
+app.get('/presentes/:id', (req, res) => {
+    const { id } = req.params;  // Pega o ID da URL
+    const presente = presentes.find(p => p.id == id);  // Busca o presente com o ID fornecido
+
+    if (!presente) {
+        return res.status(404).json({ message: 'Presente não encontrado!' });
+    }
+
+    res.json(presente);  // Retorna o presente encontrado
+});
+
 // Endpoint para alterar a disponibilidade de um presente
 app.patch('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
 
     let presente = presentes.find(p => p.id == id);
-    
+
     if (!presente) {
         return res.status(404).json({ message: 'Presente não encontrado!' });
     }
 
     presente.disponivel = disponivel;
-
     res.json(presente);
 });
 
