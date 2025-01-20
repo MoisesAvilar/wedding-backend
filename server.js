@@ -94,7 +94,7 @@ app.patch('/presentes/:id', (req, res) => {
     res.json(presente);
 });
 
-// Iniciar o servidor
+// Iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
