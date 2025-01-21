@@ -7,7 +7,7 @@ const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: '*', // Permitir todas as origens
+    origin: 'https://ar-wedding-nu.vercel.app', // Permitir todas as origens
     methods: ['GET', 'PATCH', 'OPTIONS'], // Permitir métodos GET, PATCH, e OPTIONS
     allowedHeaders: ['Content-Type'], // Permitir cabeçalhos específicos
     preflightContinue: false,
@@ -65,12 +65,12 @@ let presentes = [
   
 
 // Endpoint para obter todos os presentes
-app.get('/presentes/', (req, res) => {
+app.get('/presentes', (req, res) => {
     res.json(presentes);
 });
 
 // Endpoint para obter um presente específico
-app.get('/presentes/:id/', (req, res) => {
+app.get('/presentes/:id', (req, res) => {
     const { id } = req.params;  // Pega o ID da URL
     const presente = presentes.find(p => p.id == id);  // Busca o presente com o ID fornecido
 
@@ -82,7 +82,7 @@ app.get('/presentes/:id/', (req, res) => {
 });
 
 // Endpoint para alterar a disponibilidade de um presente
-app.put('/presentes/:id/', (req, res) => {
+app.put('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
 
