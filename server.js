@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');  // Módulo fs para ler arquivos
 
 const app = express();
 const port = 3000;
@@ -18,60 +19,22 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Lista de presentes (simulação de um banco de dados)
-let presentes = [
-    { id: 1, nome: 'Jogo de Panela', disponivel: true },
-    { id: 2, nome: 'Jogo de Xícaras', disponivel: true },
-    { id: 3, nome: 'Jogo de Sobremesa', disponivel: true },
-    { id: 4, nome: 'Jogo de Copos', disponivel: true },
-    { id: 5, nome: 'Jogo de Taças', disponivel: true },
-    { id: 6, nome: 'Jogo de Talheres', disponivel: true },
-    { id: 7, nome: 'Jogo de Pratos', disponivel: true },
-    { id: 8, nome: 'Jogo de Travessas', disponivel: true },
-    { id: 9, nome: 'Kit Faqueiro', disponivel: true },
-    { id: 10, nome: 'Kit Churrasqueiro', disponivel: true },
-    { id: 11, nome: 'Kit Utilidades', disponivel: true },
-    { id: 12, nome: 'Saladeira', disponivel: true },
-    { id: 13, nome: 'Formas de Bolo', disponivel: true },
-    { id: 14, nome: 'Jarras de Vidro', disponivel: true },
-    { id: 15, nome: 'Tábua de Cortes', disponivel: true },
-    { id: 16, nome: 'Frigideiras', disponivel: true },
-    { id: 17, nome: 'Sanduicheira', disponivel: true },
-    { id: 18, nome: 'Porta Detergente', disponivel: true },
-    { id: 19, nome: 'Porta Tempero', disponivel: true },
-    { id: 20, nome: 'Escorredor de Louças', disponivel: true },
-    { id: 21, nome: 'Vasilhas', disponivel: true },
-    { id: 22, nome: 'Liquidificador', disponivel: true },
-    { id: 23, nome: 'Batedeira', disponivel: true },
-    { id: 24, nome: 'Panela de Pressão', disponivel: true },
-    { id: 25, nome: 'Garrafa de Café', disponivel: true },
-    { id: 26, nome: 'Porta Copos', disponivel: true },
-    { id: 27, nome: 'Porta Frios', disponivel: true },
-    { id: 28, nome: 'Porta Bolo', disponivel: true },
-    { id: 29, nome: 'Bandejas', disponivel: true },
-    { id: 30, nome: 'Cuscuzeira', disponivel: true },
-    { id: 31, nome: 'Tapete Sala', disponivel: true },
-    { id: 32, nome: 'Jogo de Lençóis C. Box', disponivel: true },
-    { id: 33, nome: 'Cobertor Casal', disponivel: true },
-    { id: 34, nome: 'Manta Casal', disponivel: true },
-    { id: 35, nome: 'Jogo de Fronha', disponivel: true },
-    { id: 36, nome: 'Forro de Cama', disponivel: true },
-    { id: 37, nome: 'Cestos Organizador', disponivel: true },
-    { id: 38, nome: 'Travesseiros', disponivel: true },
-    { id: 39, nome: 'Toalhas de Banho', disponivel: true },
-    { id: 40, nome: 'Jogo de Banheiro', disponivel: true },
-    { id: 41, nome: 'Ferro de Passar', disponivel: true }
-  ];
-  
+// Função para carregar a lista de presentes a partir do arquivo JSON
+function carregarPresentes() {
+    const data = fs.readFileSync('presentes.json'); // Lê o arquivo JSON
+    return JSON.parse(data); // Retorna os dados do arquivo como um objeto
+}
 
 // Endpoint para obter todos os presentes
 app.get('/presentes', (req, res) => {
-    res.json(presentes);
+    const presentes = carregarPresentes(); // Carrega os dados do arquivo
+    res.json(presentes); // Retorna os presentes
 });
 
 // Endpoint para obter um presente específico
 app.get('/presentes/:id', (req, res) => {
     const { id } = req.params;  // Pega o ID da URL
+    const presentes = carregarPresentes(); // Carrega os dados do arquivo
     const presente = presentes.find(p => p.id == id);  // Busca o presente com o ID fornecido
 
     if (!presente) {
@@ -85,6 +48,7 @@ app.get('/presentes/:id', (req, res) => {
 app.patch('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
+    let presentes = carregarPresentes(); // Carrega os dados do arquivo
 
     let presente = presentes.find(p => p.id == id);
 
@@ -92,7 +56,12 @@ app.patch('/presentes/:id', (req, res) => {
         return res.status(404).json({ message: 'Presente não encontrado!' });
     }
 
+    // Atualiza a disponibilidade
     presente.disponivel = disponivel;
+
+    // Grava de volta o arquivo JSON com os dados atualizados
+    fs.writeFileSync('presentes.json', JSON.stringify(presentes, null, 2));
+
     res.json(presente);
 });
 
