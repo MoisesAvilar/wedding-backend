@@ -8,7 +8,7 @@ const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: 'https://ar-wedding-nu.vercel.app', // Substitua pelo domínio do front-end
+    origin: 'https://ar-wedding-nu.vercel.app',  // Substitua pelo domínio do front-end
     methods: ['GET', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
     preflightContinue: false,
