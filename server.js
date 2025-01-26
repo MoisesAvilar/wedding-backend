@@ -30,13 +30,16 @@ app.use((req, res, next) => {
 // Função para carregar a lista de presentes com tratamento de erros
 function carregarPresentes() {
     try {
-        const data = fs.readFileSync('public/presentes.json', 'utf8');  // Lê o arquivo JSON
-        return JSON.parse(data); // Retorna os dados do arquivo como um objeto
+        const path = require('path');
+        const filePath = path.join(__dirname, 'presentes.json');
+        const data = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(data);
     } catch (error) {
         console.error('Erro ao carregar o arquivo presentes.json:', error);
-        return []; // Retorna uma lista vazia se houver erro
+        return [];
     }
 }
+
 
 // Endpoint para obter todos os presentes
 app.get('/presentes', (req, res) => {
