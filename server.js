@@ -1,14 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const fs = require('fs'); // Módulo fs para ler arquivos
 
 const app = express();
 const port = 3000;
 
 // Configuração de CORS
 const corsOptions = {
-    origin: 'https://ar-wedding-nu.vercel.app',  // Substitua pelo domínio do front-end
+    origin: 'https://ar-wedding-nu.vercel.app', // Substitua pelo domínio do front-end
     methods: ['GET', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
     preflightContinue: false,
@@ -18,39 +17,58 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Adiciona cabeçalhos para Content Security Policy
-app.use((req, res, next) => {
-    res.set({
-        "Content-Security-Policy": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-    });
-    next();
-});
-
-
-// Função para carregar a lista de presentes com tratamento de erros
-function carregarPresentes() {
-    try {
-        const path = require('path');
-        const filePath = path.join(__dirname, 'presentes.json');
-        const data = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Erro ao carregar o arquivo presentes.json:', error);
-        return [];
-    }
-}
-
+const presentes = [
+    { id: 1, nome: 'Jogo de Panela', disponivel: true },
+    { id: 2, nome: 'Jogo de Xícaras', disponivel: true },
+    { id: 3, nome: 'Jogo de Sobremesa', disponivel: true },
+    { id: 4, nome: 'Jogo de Copos', disponivel: true },
+    { id: 5, nome: 'Jogo de Taças', disponivel: true },
+    { id: 6, nome: 'Jogo de Talheres', disponivel: true },
+    { id: 7, nome: 'Jogo de Pratos', disponivel: true },
+    { id: 8, nome: 'Jogo de Travessas', disponivel: true },
+    { id: 9, nome: 'Kit Faqueiro', disponivel: true },
+    { id: 10, nome: 'Kit Churrasqueiro', disponivel: true },
+    { id: 11, nome: 'Kit Utilidades', disponivel: true },
+    { id: 12, nome: 'Saladeira', disponivel: true },
+    { id: 13, nome: 'Formas de Bolo', disponivel: true },
+    { id: 14, nome: 'Jarras de Vidro', disponivel: true },
+    { id: 15, nome: 'Tábua de Cortes', disponivel: true },
+    { id: 16, nome: 'Frigideiras', disponivel: true },
+    { id: 17, nome: 'Sanduicheira', disponivel: true },
+    { id: 18, nome: 'Porta Detergente', disponivel: true },
+    { id: 19, nome: 'Porta Tempero', disponivel: true },
+    { id: 20, nome: 'Escorredor de Louças', disponivel: true },
+    { id: 21, nome: 'Vasilhas', disponivel: true },
+    { id: 22, nome: 'Liquidificador', disponivel: true },
+    { id: 23, nome: 'Batedeira', disponivel: true },
+    { id: 24, nome: 'Panela de Pressão', disponivel: true },
+    { id: 25, nome: 'Garrafa de Café', disponivel: true },
+    { id: 26, nome: 'Porta Copos', disponivel: true },
+    { id: 27, nome: 'Porta Frios', disponivel: true },
+    { id: 28, nome: 'Porta Bolo', disponivel: true },
+    { id: 29, nome: 'Bandejas', disponivel: true },
+    { id: 30, nome: 'Cuscuzeira', disponivel: true },
+    { id: 31, nome: 'Tapete Sala', disponivel: true },
+    { id: 32, nome: 'Jogo de Lençóis C. Box', disponivel: true },
+    { id: 33, nome: 'Cobertor Casal', disponivel: true },
+    { id: 34, nome: 'Manta Casal', disponivel: true },
+    { id: 35, nome: 'Jogo de Fronha', disponivel: true },
+    { id: 36, nome: 'Forro de Cama', disponivel: true },
+    { id: 37, nome: 'Cestos Organizador', disponivel: true },
+    { id: 38, nome: 'Travesseiros', disponivel: true },
+    { id: 39, nome: 'Toalhas de Banho', disponivel: true },
+    { id: 40, nome: 'Jogo de Banheiro', disponivel: true },
+    { id: 41, nome: 'Ferro de Passar', disponivel: true }
+  ];
 
 // Endpoint para obter todos os presentes
 app.get('/presentes', (req, res) => {
-    const presentes = carregarPresentes(); // Carrega os dados do arquivo
-    res.json(presentes); // Retorna os presentes
+    res.json(presentes); // Retorna os presentes diretamente
 });
 
 // Endpoint para obter um presente específico
 app.get('/presentes/:id', (req, res) => {
     const { id } = req.params; // Pega o ID da URL
-    const presentes = carregarPresentes(); // Carrega os dados do arquivo
     const presente = presentes.find(p => p.id == id); // Busca o presente com o ID fornecido
 
     if (!presente) {
@@ -64,7 +82,6 @@ app.get('/presentes/:id', (req, res) => {
 app.patch('/presentes/:id', (req, res) => {
     const { id } = req.params;
     const { disponivel } = req.body;
-    let presentes = carregarPresentes(); // Carrega os dados do arquivo
 
     let presente = presentes.find(p => p.id == id);
 
@@ -74,15 +91,6 @@ app.patch('/presentes/:id', (req, res) => {
 
     // Atualiza a disponibilidade
     presente.disponivel = disponivel;
-
-    // Grava de volta o arquivo JSON com os dados atualizados
-    try {
-        fs.writeFileSync('presentes.json', JSON.stringify(presentes, null, 2));
-        res.json(presente);
-    } catch (error) {
-        console.error('Erro ao salvar o arquivo presentes.json:', error);
-        res.status(500).json({ message: 'Erro ao atualizar o presente' });
-    }
 });
 
 // Iniciar servidor
